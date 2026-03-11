@@ -38,6 +38,7 @@
     "build": "tsup src/index.ts src/server/index.ts src/react/index.ts src/next/index.ts --format cjs,esm --dts",
     "dev": "tsup src/index.ts src/server/index.ts src/react/index.ts src/next/index.ts --format cjs,esm --dts --watch",
     "typecheck": "tsc --noEmit",
+    "pack:dry-run": "npm pack --dry-run --workspaces=false",
     "lint": "eslint src/",
     "clean": "rm -rf dist node_modules"
   },
@@ -63,7 +64,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/labobankcom/ecommaps-ai-sales-agent.git"
+    "url": "git+https://github.com/labobankcom/ecommaps-ai-sales-agent.git"
   },
   "bugs": {
     "url": "https://github.com/labobankcom/ecommaps-ai-sales-agent/issues"
