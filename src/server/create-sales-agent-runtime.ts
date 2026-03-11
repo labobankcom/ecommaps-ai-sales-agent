@@ -1,10 +1,12 @@
 import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from "ai";
 
+type StreamTextInput = Parameters<typeof streamText>[0];
+
 export type CreateSalesAgentRuntimeInput = {
-  model: unknown;
+  model: StreamTextInput["model"];
   systemPrompt: string;
   messages: UIMessage[];
-  tools: Record<string, unknown>;
+  tools: NonNullable<StreamTextInput["tools"]>;
   maxSteps?: number;
 };
 

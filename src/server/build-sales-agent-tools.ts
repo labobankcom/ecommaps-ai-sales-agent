@@ -12,6 +12,13 @@ function isUuid(value?: string | null): value is string {
   return typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 }
 
+function toStorefrontProductLike(product: EcommapsProduct): EcommapsProduct {
+  return {
+    ...product,
+    in_stock: product.in_stock ?? undefined,
+  };
+}
+
 export function buildSalesAgentTools({ client, getOrCreateCartId }: BuildSalesAgentToolsInput) {
   return {
     getStoreProfile: tool({
@@ -45,9 +52,10 @@ export function buildSalesAgentTools({ client, getOrCreateCartId }: BuildSalesAg
 
         if (color || size) {
           data = data.filter((product) => {
+            const productLike = toStorefrontProductLike(product);
             const variants = Array.isArray(product.variants) ? product.variants : [];
             return variants.some((variant) => {
-              const result = resolveVariantSelection(product, {
+              const result = resolveVariantSelection(productLike, {
                 color,
                 size,
                 variant_id: typeof variant.id === "string" ? variant.id : undefined,
@@ -60,7 +68,7 @@ export function buildSalesAgentTools({ client, getOrCreateCartId }: BuildSalesAg
         return {
           success: true,
           total: data.length,
-          products: data.slice(0, limit).map((product) => normalizeProductCard(product)),
+          products: data.slice(0, limit).map((product) => normalizeProductCard(toStorefrontProductLike(product))),
         };
       },
     }),
@@ -103,7 +111,7 @@ export function buildSalesAgentTools({ client, getOrCreateCartId }: BuildSalesAg
           return { success: false, error: "المنتج غير موجود", cart_id: null, cart: null };
         }
 
-        const selection = resolveVariantSelection(product, {
+        const selection = resolveVariantSelection(toStorefrontProductLike(product), {
           variant_id: providedVariantId,
           color,
           size,
