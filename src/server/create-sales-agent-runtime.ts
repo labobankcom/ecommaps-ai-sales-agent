@@ -10,16 +10,20 @@ export type CreateSalesAgentRuntimeInput = {
   maxSteps?: number;
 };
 
+export type SalesAgentRuntimeResult = {
+  toUIMessageStreamResponse: (options?: { sendReasoning?: boolean }) => Response;
+};
+
 export async function createSalesAgentRuntime({
   model,
   systemPrompt,
   messages,
   tools,
   maxSteps = 6,
-}: CreateSalesAgentRuntimeInput) {
+}: CreateSalesAgentRuntimeInput): Promise<SalesAgentRuntimeResult> {
   const modelMessages = await convertToModelMessages(messages);
 
-  return streamText({
+  const result = streamText({
     model,
     system: systemPrompt,
     messages: modelMessages,
@@ -27,4 +31,6 @@ export async function createSalesAgentRuntime({
     toolChoice: "auto",
     tools,
   });
+
+  return result as unknown as SalesAgentRuntimeResult;
 }
