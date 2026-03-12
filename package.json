@@ -1,6 +1,6 @@
 {
   "name": "@ecommaps/ai-sales-agent",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ecommaps sales agent kit (server tools + React UI).",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
